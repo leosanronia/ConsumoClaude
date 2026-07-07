@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="popup.css" />
+    <title>Uso de Claude.ai</title>
+  </head>
+  <body>
+    <div class="app">
+      <header class="app-head">
+        <div class="title">
+          <span class="dot"></span>
+          Uso de Claude.ai
+        </div>
+        <div class="head-actions">
+          <button id="refresh" class="icon-btn" title="Actualizar ahora" aria-label="Actualizar">&#8635;</button>
+          <button id="gear" class="icon-btn" title="Ajustes" aria-label="Ajustes">&#9881;</button>
+        </div>
+      </header>
+
+      <div id="error" class="error hidden"></div>
+
+      <!-- Ventana de sesion -->
+      <section class="meter" data-win="session">
+        <div class="meter-head">
+          <span class="meter-name">Sesion &middot; 5h</span>
+          <span class="meter-pct" data-role="pct">&ndash;&ndash;%</span>
+        </div>
+        <div class="battery" data-role="battery">
+          <div class="battery-body">
+            <div class="battery-fill" data-role="fill"></div>
+            <div class="battery-ticks"></div>
+          </div>
+          <div class="battery-cap"></div>
+        </div>
+        <div class="meter-sub">
+          <span data-role="reset">reinicia en &ndash;&ndash;</span>
+        </div>
+        <canvas class="spark" data-role="spark" width="288" height="30"></canvas>
+      </section>
+
+      <!-- Ventana semanal -->
+      <section class="meter" data-win="weekly">
+        <div class="meter-head">
+          <span class="meter-name">Semanal</span>
+          <span class="meter-pct" data-role="pct">&ndash;&ndash;%</span>
+        </div>
+        <div class="battery" data-role="battery">
+          <div class="battery-body">
+            <div class="battery-fill" data-role="fill"></div>
+            <div class="battery-ticks"></div>
+          </div>
+          <div class="battery-cap"></div>
+        </div>
+        <div class="meter-sub">
+          <span data-role="reset">reinicia en &ndash;&ndash;</span>
+        </div>
+        <canvas class="spark" data-role="spark" width="288" height="30"></canvas>
+      </section>
+
+      <footer class="app-foot">
+        <span id="updated">&mdash;</span>
+        <span id="via" class="via"></span>
+      </footer>
+
+      <!-- Panel de ajustes -->
+      <div id="settings" class="settings hidden">
+        <label class="field">
+          <span>Endpoint manual (opcional)</span>
+          <input id="endpoint" type="text" spellcheck="false"
+                 placeholder="https://claude.ai/api/organizations/&#123;org&#125;/usage" />
+        </label>
+        <label class="row">
+          <input id="overlay" type="checkbox" />
+          <span>Overlay flotante dentro de claude.ai</span>
+        </label>
+        <label class="row">
+          <input id="notif" type="checkbox" />
+          <span>Notificaciones al 50 / 75 / 90%</span>
+        </label>
+        <div class="settings-actions">
+          <button id="save" class="primary">Guardar</button>
+          <button id="clearHist" class="ghost">Borrar historial</button>
+        </div>
+        <p class="hint">
+          Si el uso no aparece, confirma la URL real en
+          DevTools &rarr; Network (Fetch/XHR) y pegala aqui. Usa
+          <code>&#123;org&#125;</code> donde vaya el ID de organizacion.
+        </p>
+      </div>
+    </div>
+
+    <script type="module" src="popup.js"></script>
+  </body>
+</html>
