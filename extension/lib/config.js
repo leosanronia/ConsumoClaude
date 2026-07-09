@@ -65,9 +65,9 @@ export const DEFAULT_SETTINGS = {
 
 // Colores por nivel de uso (deben coincidir con popup.css).
 export const LEVEL_COLORS = {
-  safe: "#22d3ee", // cian
-  warn: "#f59e0b", // ambar
-  danger: "#ef4444", // rojo
+  safe: "#d97757", // naranja Claude
+  warn: "#f0a03c", // ambar
+  danger: "#e05a4d", // rojo
 };
 
 // Devuelve el "nivel" segun el porcentaje.

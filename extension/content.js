@@ -34,11 +34,31 @@ chrome.runtime.onMessage.addListener((msg, _sender, sendResponse) => {
 
 const OVERLAY_ID = "claude-usage-overlay";
 
+// Sunburst de Claude (mismo mark que el popup / los iconos), en naranja marca.
+const LOGO_SVG =
+  '<svg viewBox="0 0 100 100" width="13" height="13" style="flex:none;color:#d97757" aria-hidden="true"><g fill="currentColor">' +
+  '<circle cx="50" cy="50" r="6"/>' +
+  [0, 30, 60, 90, 120, 150, 180, 210, 240, 270, 300, 330]
+    .map(
+      (a) =>
+        `<path d="M50 47 Q45.8 25 50 7 Q54.2 25 50 47 Z" transform="rotate(${a} 50 50)"/>`
+    )
+    .join("") +
+  "</g></svg>";
+
+function overlayHeader() {
+  return (
+    '<div style="display:flex;align-items:center;gap:5px;margin-bottom:5px;font-weight:600;color:#f4f2ec">' +
+    LOGO_SVG +
+    "<span>Uso de Claude</span></div>"
+  );
+}
+
 function colorFor(pct) {
-  if (pct == null) return "#64748b";
-  if (pct >= 90) return "#ef4444";
-  if (pct >= 65) return "#f59e0b";
-  return "#22d3ee";
+  if (pct == null) return "#a8a29a";
+  if (pct >= 90) return "#e05a4d";
+  if (pct >= 65) return "#f0a03c";
+  return "#d97757";
 }
 
 function ensureOverlay() {
@@ -51,13 +71,13 @@ function ensureOverlay() {
     bottom: "16px",
     right: "16px",
     zIndex: "2147483647",
-    background: "rgba(15,23,42,0.92)",
-    color: "#e2e8f0",
+    background: "rgba(38,38,36,0.94)",
+    color: "#f4f2ec",
     font: "11px/1.3 ui-monospace, SFMono-Regular, Menlo, monospace",
     padding: "8px 10px",
     borderRadius: "10px",
-    border: "1px solid rgba(148,163,184,0.25)",
-    boxShadow: "0 6px 20px rgba(0,0,0,0.35)",
+    border: "1px solid rgba(240,238,230,0.14)",
+    boxShadow: "0 6px 20px rgba(0,0,0,0.45)",
     width: "150px",
     pointerEvents: "none",
     backdropFilter: "blur(4px)",
@@ -80,7 +100,7 @@ function miniBar(label, pct) {
       <div style="display:flex;justify-content:space-between;opacity:.8">
         <span>${label}</span><span>${txt}</span>
       </div>
-      <div style="height:6px;background:rgba(148,163,184,0.2);border-radius:4px;overflow:hidden;margin-top:2px">
+      <div style="height:6px;background:rgba(240,238,230,0.14);border-radius:4px;overflow:hidden;margin-top:2px">
         <div style="height:100%;width:${width}%;background:${color};border-radius:4px"></div>
       </div>
     </div>`;
@@ -89,14 +109,16 @@ function miniBar(label, pct) {
 function renderOverlay(latest) {
   const el = ensureOverlay();
   if (!latest) {
-    el.innerHTML = `<div style="opacity:.7">Uso de Claude: sin datos</div>`;
+    el.innerHTML = overlayHeader() + `<div style="opacity:.7">sin datos</div>`;
     return;
   }
   if (!latest.ok) {
-    el.innerHTML = `<div style="color:#f59e0b">Uso: no disponible</div>`;
+    el.innerHTML =
+      overlayHeader() + `<div style="color:#f0a03c">no disponible</div>`;
     return;
   }
   el.innerHTML =
+    overlayHeader() +
     miniBar("Sesion", latest.session?.pct ?? null) +
     miniBar("Semanal", latest.weekly?.pct ?? null);
 }

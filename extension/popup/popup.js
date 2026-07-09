@@ -15,10 +15,10 @@ import {
 import { levelFor } from "../lib/config.js";
 
 const LEVELS = {
-  safe: { stroke: "#22d3ee", fill: "rgba(34,211,238,0.16)" },
-  warn: { stroke: "#f59e0b", fill: "rgba(245,158,11,0.16)" },
-  danger: { stroke: "#ef4444", fill: "rgba(239,68,68,0.18)" },
-  unknown: { stroke: "#64748b", fill: "rgba(100,116,139,0.12)" },
+  safe: { stroke: "#d97757", fill: "rgba(217,119,87,0.18)" },
+  warn: { stroke: "#f0a03c", fill: "rgba(240,160,60,0.16)" },
+  danger: { stroke: "#e05a4d", fill: "rgba(224,90,77,0.18)" },
+  unknown: { stroke: "#a8a29a", fill: "rgba(168,162,154,0.12)" },
 };
 
 const $ = (sel, root = document) => root.querySelector(sel);
