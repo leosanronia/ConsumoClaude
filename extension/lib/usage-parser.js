@@ -19,7 +19,9 @@ const RX = {
   weekly: /week|weekly|7[\s_-]?day|7d|seven[\s_-]?day/i,
   session: /session|five[\s_-]?hour|5[\s_-]?hour|5h|rolling|hourly/i,
   percent: /(pct|percent|percentage|utiliz|usage_ratio|use_ratio|ratio|fraction)/i,
-  used: /(used|consumed|spent|count|current)/i,
+  // "count"/"current" se quitaron a proposito: son tan genericos que cruzaban
+  // contadores no relacionados con el limite y producian un falso 100%.
+  used: /(used|consumed|spent|utilized)/i,
   limit: /(limit|max|cap|quota|allowance|total|budget)/i,
   remaining: /(remaining|left|available)/i,
   reset: /(reset|renew|refresh|expire|next[\s_-]?reset|window[\s_-]?end|ends?[\s_-]?at|period[\s_-]?end)/i,
@@ -83,8 +85,14 @@ function pairPercentForObject(obj) {
     else if (used == null && RX.used.test(kl)) used = v;
   }
   if (limit != null && limit > 0) {
-    if (used != null) return { pct: clampPct((used / limit) * 100), used, limit };
-    if (remaining != null)
+    // Sanidad: un par valido cumple 0 <= usado <= limite (con un pelin de
+    // tolerancia por redondeo). Si "usado" supera al limite es que cruzamos
+    // campos no relacionados -> lo descartamos en vez de recortarlo a 100%,
+    // que es justo lo que causaba el falso 100% semanal.
+    const tol = limit * 1.02;
+    if (used != null && used >= 0 && used <= tol)
+      return { pct: clampPct((used / limit) * 100), used, limit };
+    if (remaining != null && remaining >= 0 && remaining <= tol)
       return { pct: clampPct(((limit - remaining) / limit) * 100), used: limit - remaining, limit };
   }
   return null;
